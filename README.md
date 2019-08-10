@@ -1,5 +1,5 @@
 # Project Creator
-A Yython automation app that gets you started with your project. For windows. Not sure how this will work on Mac.
+A Python automation app that gets you started with your project. For windows. Not sure how this will work on Mac.
 
 ## Instalation
 You will need to install selenium
