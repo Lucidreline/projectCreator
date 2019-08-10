@@ -13,7 +13,7 @@ And also install Chrome Driver. Then put chrome driver in a folder, copy the pat
 ## Usage
 Open up app.py and enter your github username and password on lines 8 and 9.
 
-Change 11 line to the path where you want to create your new folder
+Change line 11 to the path where you want to create your new folder
 
 To create a project, open your terminal and change dir into this folder. Then, run the python script along with your project's name
 
