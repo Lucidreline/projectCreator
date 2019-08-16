@@ -1,16 +1,8 @@
+import config
 import os
-import subprocess
 import sys
 from selenium import webdriver
 from time import sleep
-
-#github creds
-github_Username = "Lucidreline"
-github_Password = os.environ.get("GITHUB_PW") #Put your password here
-
-projectsFolderPath = "C:/Users/ma52c/Storage/Coding/Projects/"
-
-browser = webdriver.Chrome()
 
 
 #Takes in argument from the terminal and setsit as the project name
@@ -20,34 +12,36 @@ projectName = str(sys.argv[1])
 filesInDir = os.listdir("C:/Users/ma52c/Storage/Coding/Projects/")
 for file in filesInDir:
     if(file == projectName):
-        print("ERROR: Project name already exsists. Pick a different name!")
+        print("ERROR: Project name already exists. Pick a different name!")
         quit()
 
+#Opens up a chrome browser
+browser = webdriver.Chrome()
+
 #changes to the projects dir
-os.chdir(projectsFolderPath)
+os.chdir(config.PROJECTS_FOLDER_PATH)
 
 #creates folder
 os.system("mkdir " + projectName)
 
 #go into the new project folder
-os.chdir(projectsFolderPath + projectName + "/")
+os.chdir(config.PROJECTS_FOLDER_PATH + projectName + "/")
 
 #creates the files
-filesToCreate = ["app.py", "README.md", "CheckList.txt"]
+filesToCreate = config.FILES_TO_CREATE
 for file in filesToCreate:
     os.system("type nul > " + file)
 
 
 def gitSetup(_projectName):
     
-
     browser.get("https://github.com/login")
 
     #put in email
-    browser.find_elements_by_xpath("//*[@id='login_field']")[0].send_keys(github_Username)
+    browser.find_elements_by_xpath("//*[@id='login_field']")[0].send_keys(config.GITHUB_USERNAME)
 
     #put in password
-    browser.find_elements_by_xpath("//*[@id='password']")[0].send_keys(github_Password)
+    browser.find_elements_by_xpath("//*[@id='password']")[0].send_keys(config.GITHUB_PASSWORD)
 
     #hit signin
     browser.find_elements_by_xpath("//*[@id='login']/form/div[3]/input[7]")[0].click()
@@ -67,18 +61,11 @@ def gitSetup(_projectName):
     repoLink = str(repoLink)
 
     #basic commands to init the local repo and connect it to the remote one
-    gitCommands = ["git init", "git add .", """git commit -m "first commit" """, "git remote add origin " + repoLink, "git push -u origin master"]
+    gitCommands = ["git init", "git add .", """git commit -m "Initial commit." """, "git remote add origin " + repoLink, "git push -u origin master"]
     
     for command in gitCommands:
         os.system(command)
     
-        
-    #make github repo private 
-    browser.get("https://github.com/" + github_Username + "/" + projectName + "/settings")
-    browser.find_elements_by_xpath("//*[@id='options_bucket']/div[8]/ul/li[1]/details/summary")[0].click()
-    browser.find_elements_by_xpath("//*[@id='options_bucket']/div[8]/ul/li[1]/details/details-dialog/div[4]/form/p/input")[0].send_keys(projectName)
-    browser.find_elements_by_xpath("//*[@id='options_bucket']/div[8]/ul/li[1]/details/details-dialog/div[4]/form/div/button")[0].click()
-
     #close browser
     browser.close()
 
